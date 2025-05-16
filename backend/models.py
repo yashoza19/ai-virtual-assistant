@@ -67,16 +67,22 @@ class VirtualAssistant(Base):
     created_at = Column(TIMESTAMP(timezone=True), server_default=func.now())
     updated_at = Column(TIMESTAMP(timezone=True), server_default=func.now(), onupdate=func.now())
     creator = relationship("User", back_populates="virtual_assistants")
+    knowledge_bases = relationship("VirtualAssistantKnowledgeBase", back_populates="virtual_assistant", cascade="all, delete-orphan")
+    tools = relationship("VirtualAssistantTool", back_populates="virtual_assistant", cascade="all, delete-orphan")
 
 class VirtualAssistantKnowledgeBase(Base):
     __tablename__ = "virtual_assistant_knowledge_bases"
     virtual_assistant_id = Column(UUID(as_uuid=True), ForeignKey("virtual_assistants.id", ondelete="CASCADE"), primary_key=True)
-    knowledge_base_id = Column(String(255), nullable=False)
+    knowledge_base_id = Column(UUID(as_uuid=True), ForeignKey("knowledge_bases.id", ondelete="CASCADE"), primary_key=True)
+    virtual_assistant = relationship("VirtualAssistant", back_populates="knowledge_bases")
+    knowledge_base = relationship("KnowledgeBase")
 
 class VirtualAssistantTool(Base):
     __tablename__ = "virtual_assistant_tools"
     virtual_assistant_id = Column(UUID(as_uuid=True), ForeignKey("virtual_assistants.id", ondelete="CASCADE"), primary_key=True)
-    mcp_server_id = Column(String(255), nullable=False)
+    mcp_server_id = Column(UUID(as_uuid=True), ForeignKey("mcp_servers.id", ondelete="CASCADE"), primary_key=True)
+    virtual_assistant = relationship("VirtualAssistant", back_populates="tools")
+    mcp_server = relationship("MCPServer")
 
 class ChatHistory(Base):
     __tablename__ = "chat_history"
