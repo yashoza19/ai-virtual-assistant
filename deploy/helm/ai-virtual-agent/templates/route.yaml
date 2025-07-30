@@ -1,0 +1,16 @@
+---
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: {{ include "ai-virtual-agent.fullname" . }}-authenticated
+  labels:
+    {{- include "ai-virtual-agent.labels" . | nindent 4 }}
+spec:
+  to:
+    name: {{ include "ai-virtual-agent.fullname" . }}
+  port:
+    targetPort: oauth-proxy
+  tls:
+    termination: reencrypt
+  annotations:
+    oauth.openshift.io/oauth-redirect-reference: '{"kind":"OAuthRedirectReference","apiVersion":"v1","reference":{"kind":"Route","name":"{{ include "ai-virtual-agent.fullname" . }}-authenticated"}}'

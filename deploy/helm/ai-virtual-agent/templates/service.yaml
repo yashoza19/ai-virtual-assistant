@@ -1,0 +1,27 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "ai-virtual-agent.fullname" . }}
+  annotations:
+    service.alpha.openshift.io/serving-cert-secret-name: ai-virtual-agent-tls
+  labels:
+    {{- include "ai-virtual-agent.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: {{ .Values.service.port }}
+      targetPort: http
+      protocol: TCP
+      name: http
+    - port: 8888
+      targetPort: oauth-proxy
+      protocol: TCP
+      name: oauth-proxy
+    - port: 8887
+      targetPort: proxy-http
+      protocol: TCP
+      name: proxy-http
+  selector:
+    {{- include "ai-virtual-agent.selectorLabels" . | nindent 4 }}
+  sessionAffinity: None
