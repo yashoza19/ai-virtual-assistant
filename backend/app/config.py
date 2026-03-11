@@ -10,6 +10,9 @@ from dotenv import load_dotenv
 load_dotenv()
 
 
+ENV_DEFAULT_MODEL_SENTINEL = "__env_default__"
+
+
 class Settings:
     """Application settings and configuration."""
 
@@ -50,6 +53,16 @@ class Settings:
     LANGGRAPH_LLM_API_KEY: str = os.getenv("LANGGRAPH_LLM_API_KEY", "no-key")
     # Override model name for LangGraph agents. If not set, uses the agent's model_name.
     LANGGRAPH_DEFAULT_MODEL: Optional[str] = os.getenv("LANGGRAPH_DEFAULT_MODEL")
+
+    # CrewAI Runner Configuration
+    # Base URL for the OpenAI-compatible LLM API used by CrewAI agents.
+    CREWAI_LLM_API_BASE: Optional[str] = os.getenv("CREWAI_LLM_API_BASE")
+    # API key for the LLM API. Falls back to OPENAI_API_KEY if not explicitly set.
+    CREWAI_LLM_API_KEY: str = os.getenv(
+        "CREWAI_LLM_API_KEY", os.getenv("OPENAI_API_KEY", "no-key")
+    )
+    # Default model name for CrewAI agents. If not set, uses the agent's model_name.
+    CREWAI_DEFAULT_MODEL: Optional[str] = os.getenv("CREWAI_DEFAULT_MODEL")
 
 
 settings = Settings()

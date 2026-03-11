@@ -368,6 +368,7 @@ export function AgentForm({
             >
               <FormSelectOption value="llamastack" label="LlamaStack (default)" />
               <FormSelectOption value="langgraph" label="LangGraph" />
+              <FormSelectOption value="crewai" label="CrewAI" />
             </FormSelect>
             <FormHelperText>
               Execution engine for this agent. LangGraph supports declarative graph workflows.
@@ -462,7 +463,7 @@ export function AgentForm({
                     <FormSelectOption
                       key={model.model_name}
                       value={model.model_name}
-                      label={model.model_name}
+                      label={model.display_name || model.model_name}
                     />
                   ))}
                 </Fragment>
