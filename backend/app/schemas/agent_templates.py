@@ -14,7 +14,7 @@ class AgentTemplate(BaseModel):
     name: str
     persona: str
     prompt: str
-    model_name: str
+    model_name: Optional[str] = None  # Optional - can be specified in YAML or selected by user
     runner_type: str = "llamastack"
     tools: List[Dict[str, str]]
     knowledge_base_ids: List[str]

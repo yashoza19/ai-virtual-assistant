@@ -60,7 +60,7 @@ def convert_yaml_template_to_agent_template(
         name=yaml_template["name"],
         persona=yaml_template["persona"],
         prompt=yaml_template["prompt"],
-        model_name=yaml_template["model_name"],
+        model_name=yaml_template.get("model_name"),  # Optional - can be None
         runner_type=yaml_template.get("runner_type", "llamastack"),
         tools=yaml_template.get("tools") or [],
         knowledge_base_ids=yaml_template.get("knowledge_base_ids") or [],

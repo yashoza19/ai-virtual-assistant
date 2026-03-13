@@ -54,7 +54,7 @@ export interface AgentTemplate {
   name: string;
   persona: string;
   prompt: string;
-  model_name: string;
+  model_name?: string;  // Optional - can be specified in template or selected by user
   tools: Array<{ toolgroup_id: string }>;
   knowledge_base_ids: string[];
   knowledge_base_config?: {

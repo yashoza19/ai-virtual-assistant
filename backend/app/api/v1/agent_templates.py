@@ -331,19 +331,27 @@ async def initialize_agent_from_template(
         if kb_ids and not any(tool.toolgroup_id == "builtin::rag" for tool in tools):
             tools.append(ToolAssociationInfo(toolgroup_id="builtin::rag"))
 
-        # Determine model: in local dev use DEFAULT_INFERENCE_MODEL so template
-        # agents work with Ollama/LlamaStack dev stack; otherwise use request or
-        # template model.
+        # Determine model: priority order:
+        # 1. User-selected model from request (highest priority)
+        # 2. Local dev DEFAULT_INFERENCE_MODEL (for dev convenience)
+        # 3. Template's model_name (YAML default, if specified)
+        # 4. Error if none provided
         if request.model_name:
             model_to_use = request.model_name
         elif is_local_dev_mode() and settings.DEFAULT_INFERENCE_MODEL:
             model_to_use = settings.DEFAULT_INFERENCE_MODEL
             logger.info(
                 f"Local dev: using DEFAULT_INFERENCE_MODEL={model_to_use} "
-                f"instead of template model '{template.model_name}'"
+                f"(template model: {template.model_name or 'not specified'})"
             )
-        else:
+        elif template.model_name:
             model_to_use = template.model_name
+        else:
+            raise HTTPException(
+                status_code=400,
+                detail=f"No model specified for template '{request.template_name}'. "
+                "Please select a model from the registered models.",
+            )
 
         agent_config = VirtualAgentCreate(
             name=agent_name,

@@ -6,7 +6,7 @@ templates:
     name: "Customer Service Assistant"
     persona: "customer_service"
     prompt: "You are a Customer Service Assistant for branch tellers and customer service representatives. You help with day-to-day customer queries about product fees, account policies, transaction processing, and regulatory timelines. You provide accurate information about bank products and services."
-    model_name: "meta-llama/Llama-3.1-8B-Instruct"
+    # model_name is optional - user will select from registered models
     tools:
       - toolgroup_id: "builtin::websearch"
     knowledge_base_ids: []
